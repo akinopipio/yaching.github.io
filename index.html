@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ya-Ching Tsui | Portfolio</title>
+    <!-- Tailwind CSS v4 -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
@@ -16,8 +18,10 @@
 </head>
 <body class="min-h-screen flex justify-center">
 
+    <!-- 作品集主要內容區域 (已彻底移除左侧编辑器，完美保留原版右侧的所有内容) -->
     <main class="w-full max-w-4xl px-8 py-16 md:px-16">
         
+        <!-- 個人頭像與基本資料 -->
         <div class="flex flex-col items-center text-center md:items-start md:text-left mb-12">
             <div class="w-32 h-32 rounded-full overflow-hidden mb-6 bg-gray-200 border border-gray-300">
                 <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400" alt="Profile" class="w-full h-full object-cover">
@@ -32,10 +36,11 @@
             </div>
             
             <p class="text-gray-600 max-w-2xl leading-relaxed">
-                Marketing manager with 7+ years driving regional growth across mobile apps, consumer tech, and gaming. Tech-savvy trendspotter with governance and global brands launch products into APAC markets — Japan, Korea, Australia, Singapore, to Taiwan — and create community programs that stick.
+                Marketing manager with 7+ years driving regional growth across mobile apps, consumer tech, and gaming. Tech-savvy trendspotter with a proven track record helping global brands launch products into APAC markets — Japan, Korea, Australia, Singapore, to Taiwan — and create community programs that stick.
             </p>
         </div>
 
+        <!-- 數據/核心成就 -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6 py-8 my-8 border-y border-gray-200 text-center md:text-left">
             <div>
                 <p class="text-3xl font-bold text-gray-900">7+</p>
@@ -55,13 +60,16 @@
             </div>
         </div>
 
+        <!-- 分頁標籤欄 -->
         <div class="flex gap-8 border-b border-gray-200 mb-8 overflow-x-auto pb-px">
             <button class="border-b-2 border-black pb-4 text-sm font-medium tracking-wide">Experience</button>
             <button class="text-gray-400 pb-4 text-sm font-medium tracking-wide hover:text-gray-600 transition">Skills</button>
             <button class="text-gray-400 pb-4 text-sm font-medium tracking-wide hover:text-gray-600 transition">Contact</button>
         </div>
 
+        <!-- 工作經歷區塊 -->
         <div class="space-y-12">
+            <!-- 經歷 1 -->
             <div class="relative pl-6 before:absolute before:left-0 before:top-2 before:bottom-0 before:w-px before:bg-gray-200">
                 <div class="absolute left-[-4px] top-2 w-2 h-2 rounded-full bg-black"></div>
                 <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2">
@@ -75,6 +83,7 @@
                 </ul>
             </div>
 
+            <!-- 經歷 2 -->
             <div class="relative pl-6 before:absolute before:left-0 before:top-2 before:bottom-0 before:w-px before:bg-gray-200">
                 <div class="absolute left-[-4px] top-2 w-2 h-2 rounded-full bg-black"></div>
                 <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2">
