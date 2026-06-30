@@ -1,104 +1,218 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ya-Ching Tsui | Portfolio</title>
-    <!-- Tailwind CSS v4 -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f7f6f3;
-            color: #37352f;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ya-Ching Tsui — Portfolio</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/1.35.0/iconfont/tabler-icons.min.css">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #f7f5f0; margin: 0; padding: 0; }
+/* 完美的預覽框架設定：直接塞滿移除編輯器後的空缺 */
+#preview-wrapper { width: 100%; min-height: 100vh; background: #f7f5f0; }
+</style>
 </head>
-<body class="min-h-screen flex justify-center">
+<body>
 
-    <!-- 作品集主要內容區域 (已彻底移除左侧编辑器，完美保留原版右侧的所有内容) -->
-    <main class="w-full max-w-4xl px-8 py-16 md:px-16">
-        
-        <!-- 個人頭像與基本資料 -->
-        <div class="flex flex-col items-center text-center md:items-start md:text-left mb-12">
-            <div class="w-32 h-32 rounded-full overflow-hidden mb-6 bg-gray-200 border border-gray-300">
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400" alt="Profile" class="w-full h-full object-cover">
-            </div>
-            <h1 class="text-4xl font-bold tracking-tight mb-2">Ya-Ching (Sunny) Tsui</h1>
-            <p class="text-lg text-gray-500 font-medium mb-4">Seattle, WA • Open to opportunities</p>
-            
-            <div class="flex gap-4 text-xl text-gray-600 mb-6">
-                <a href="#" class="hover:text-black transition"><i class="fab fa-linkedin"></i></a>
-                <a href="#" class="hover:text-black transition"><i class="fab fa-github"></i></a>
-                <a href="#" class="hover:text-black transition"><i class="fas fa-envelope"></i></a>
-            </div>
-            
-            <p class="text-gray-600 max-w-2xl leading-relaxed">
-                Marketing manager with 7+ years driving regional growth across mobile apps, consumer tech, and gaming. Tech-savvy trendspotter with a proven track record helping global brands launch products into APAC markets — Japan, Korea, Australia, Singapore, to Taiwan — and create community programs that stick.
-            </p>
-        </div>
+<!-- 隱藏的預設資料存儲節點 (完全保留你原本所有的初始文字內容，用來跑底下的渲染器) -->
+<div style="display:none;">
+  <input type="text" id="h-name" value="Ya-Ching (Sunny) Tsui">
+  <input type="text" id="h-eye" value="APAC Marketing · Brand Growth · Partnership">
+  <input type="text" id="h-title" value="Building brands|that move people.">
+  <input type="text" id="h-sub" value="Seattle, US · Open to opportunities">
+  <div id="h-bio">Marketing manager with 7+ years driving regional growth across mobile apps, consumer tech, and gaming. I build partnerships with governments and global brands, launch products into APAC markets — Japan, Korea, Australia, Singapore &amp; Taiwan — and create community programs that stick.</div>
+  
+  <input type="text" id="s1n" value="7+">
+  <input type="text" id="s1l" value="Years exp.">
+  <input type="text" id="s2n" value="33M+">
+  <input type="text" id="s2l" value="Users reached">
+  <input type="text" id="s3n" value="JP·KR·AU·SG·TW">
+  <input type="text" id="s3l" value="APAC markets">
+  <input type="text" id="s4n" value="4">
+  <input type="text" id="s4l" value="Languages">
+  
+  <input type="text" id="h-email" value="yaching.choi@gmail.com">
+  <input type="text" id="h-linkedin" value="https://linkedin.com/in/ya-ching-choi">
 
-        <!-- 數據/核心成就 -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 py-8 my-8 border-y border-gray-200 text-center md:text-left">
-            <div>
-                <p class="text-3xl font-bold text-gray-900">7+</p>
-                <p class="text-sm text-gray-500">Years Exp</p>
-            </div>
-            <div>
-                <p class="text-3xl font-bold text-gray-900">23M+</p>
-                <p class="text-sm text-gray-500">APAC Users</p>
-            </div>
-            <div>
-                <p class="text-3xl font-bold text-gray-900">JP, KR, AU</p>
-                <p class="text-sm text-gray-500">SG, TW</p>
-            </div>
-            <div>
-                <p class="text-3xl font-bold text-gray-900">1</p>
-                <p class="text-sm text-gray-500">Global Launch</p>
-            </div>
-        </div>
+  <input type="text" id="n-co" value="Niantic, Inc.">
+  <input type="text" id="n-pr" value="Jul 2024 – May 2026">
+  <input type="text" id="n-role" value="APAC Marketing Manager — Pokémon GO">
+  
+  <input type="text" id="n1t" value="Public Sector"><input type="text" id="n1ti" value="Government & tourism partnerships"><div id="n1d">Secured formal partnerships with The Pokémon Company Japan, HKTB, Singapore Tourism Board, Sydney Tourism Board, and Taipei &amp; Tainan City Governments to fund large-scale live events.</div><div id="n1m"><input type="text" value="5 markets|Nationwide media"><input type="text" value="JP·KR·AU·SG·TW|Markets covered"></div>
+  <input type="text" id="n2t" value="Co-Marketing"><input type="text" id="n2ti" value="APAC multi-channel campaigns"><div id="n2d">Leveraged co-marketing frameworks with Google Play, Samsung Taiwan, AlipayHK, KKday, Chunghwa Telecom, and CSL HK — driving 17% MoM user growth across Taiwan and Hong Kong.</div><div id="n2m"><input type="text" value="↑ 17% MoM|User growth"></div>
+  <input type="text" id="n3t" value="Community"><input type="text" id="n3ti" value="Ambassador Program — Taiwan"><div id="n3d">Built the Community Ambassador Program from 0 to 100 members in 1.5 years. Developed a campus recruitment playbook penetrating a brand-new demographic.</div><div id="n3m"><input type="text" value="0 → 100|Members in 1.5 yrs"><input type="text" value="↑ 14%|New user acquisition"><input type="text" value="CMX Award Nominee|2025"></div>
+  <input type="text" id="n4t" value="Live Events"><input type="text" id="n4ti" value="City Safari SG & GO Tour: New Taipei"><div id="n4d">Led media &amp; partner amplification for HK's first IRL Pokémon GO event in 8 years and Singapore City Safari. Secured New Taipei Metro transit advertising system-wide for a full month.</div><div id="n4m"><input type="text" value="Straits Times · CNA|Media coverage"><input type="text" value="10,000s|Attendees per event"></div>
 
-        <!-- 分頁標籤欄 -->
-        <div class="flex gap-8 border-b border-gray-200 mb-8 overflow-x-auto pb-px">
-            <button class="border-b-2 border-black pb-4 text-sm font-medium tracking-wide">Experience</button>
-            <button class="text-gray-400 pb-4 text-sm font-medium tracking-wide hover:text-gray-600 transition">Skills</button>
-            <button class="text-gray-400 pb-4 text-sm font-medium tracking-wide hover:text-gray-600 transition">Contact</button>
-        </div>
+  <input type="text" id="s-co" value="SPARKFUL"><input type="text" id="s-pr" value="Dec 2020 – Jul 2023"><input type="text" id="s-role" value="Global Marketing Manager (App)"><input type="text" id="s-note" value="20-person team · 33M+ global users in 5 years">
+  <input type="text" id="s1t" value="Brand Campaign"><input type="text" id="s1ti" value="Global brand campaign during pandemic"><div id="s1d">Led a global brand campaign during the pandemic, achieving 94% user satisfaction and a 14% annual increase in subscription sign-ups.</div><div id="s1m"><input type="text" value="94%|User satisfaction"><input type="text" value="↑ 14% YoY|Subscription sign-ups"></div>
+  <input type="text" id="s2t" value="SEO / ASO"><input type="text" id="s2ti" value="Keyword strategy & ASO"><div id="s2d">Advanced all products to page 1 within 6 months. Developed data-driven ASO for US, EU, and APAC — all apps entered top 10 rankings within one year, driving 24% YoY organic growth.</div><div id="s2m"><input type="text" value="↑ 24% YoY|Organic acquisition"><input type="text" value="Top 10 in 1 yr|All apps ranked"></div>
+  <input type="text" id="s3t" value="EDM / CRM"><input type="text" id="s3ti" value="EDM funnel & retention strategy"><div id="s3d">Achieved EDM funnel annual ROI in 7 months. Improved email open rates by 25% and boosted paid subscriptions by 8%.</div><div id="s3m"><input type="text" value="↑ 25%|Email open rate"><input type="text" value="↑ 8%|Paid subscriptions"><input type="text" value="7 months|Annual ROI achieved in"></div>
 
-        <!-- 工作經歷區塊 -->
-        <div class="space-y-12">
-            <!-- 經歷 1 -->
-            <div class="relative pl-6 before:absolute before:left-0 before:top-2 before:bottom-0 before:w-px before:bg-gray-200">
-                <div class="absolute left-[-4px] top-2 w-2 h-2 rounded-full bg-black"></div>
-                <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2">
-                    <h3 class="text-xl font-bold">Senior Regional Marketing Manager</h3>
-                    <span class="text-sm text-gray-400 font-medium">2022 - Present</span>
-                </div>
-                <p class="text-gray-500 font-medium mb-4">Tech Corp • Tokyo / Remote</p>
-                <ul class="list-disc list-outside ml-4 text-gray-600 space-y-2 leading-relaxed">
-                    <li>Led cross-functional teams to launch mobile gaming applications across 5 APAC territories, achieving 15% YoY user acquisition growth.</li>
-                    <li>Designed localization and community engagement strategies tailored for Japanese and Korean market nuances.</li>
-                </ul>
-            </div>
+  <input type="text" id="o-co" value="OPPO"><input type="text" id="o-pr" value="Oct 2019 – Dec 2020"><input type="text" id="o-role" value="Senior Product Marketing Specialist — Smartphone">
+  <input type="text" id="o1t" value="CRM"><input type="text" id="o1ti" value="CRM optimization & retention"><div id="o1d">Re-engaged lapsed members by collaborating with the I/T team for CRM optimization, doubling retention rate from 6% to 13% in just 2 months.</div><div id="o1m"><input type="text" value="6% → 13%|Retention in 2 months"></div>
+  <input type="text" id="o2t" value="Go-to-Market"><input type="text" id="o2ti" value="Flagship smartphone GTM strategy"><div id="o2d">Drove the GTM strategy for OPPO's flagship mobile phone launch, delivering a 17% increase in product sales vs the previous season.</div><div id="o2m"><input type="text" value="↑ 17%|Product sales vs prior season"></div>
 
-            <!-- 經歷 2 -->
-            <div class="relative pl-6 before:absolute before:left-0 before:top-2 before:bottom-0 before:w-px before:bg-gray-200">
-                <div class="absolute left-[-4px] top-2 w-2 h-2 rounded-full bg-black"></div>
-                <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2">
-                    <h3 class="text-xl font-bold">Growth Marketing Specialist</h3>
-                    <span class="text-sm text-gray-400 font-medium">2019 - 2022</span>
-                </div>
-                <p class="text-gray-500 font-medium mb-4">Consumer Tech Inc • Taipei</p>
-                <ul class="list-disc list-outside ml-4 text-gray-600 space-y-2 leading-relaxed">
-                    <li>Managed digital advertising budget of $500K+ annually, optimizing ROAS by 25% through meticulous A/B testing and audience segmentation.</li>
-                    <li>Spearheaded influencer marketing campaigns that generated over 2M impressions.</li>
-                </ul>
-            </div>
-        </div>
+  <input type="text" id="c-co" value="Cheetah Mobile"><input type="text" id="c-pr" value="Jun 2018 – Oct 2019"><input type="text" id="c-role" value="Product Marketing Specialist — AI and IoT">
+  <input type="text" id="c1t" value="Product Launch"><input type="text" id="c1ti" value="IoT device launch campaigns"><div id="c1d">Collaborated with cross-functional teams to develop and execute launch plans and creative content assets for IoT devices, resulting in a 10% increase in sales.</div><div id="c1m"><input type="text" value="↑ 10%|Sales increase"></div>
 
-    </main>
+  <input type="text" id="sk1" value="Brand strategy, Go-to-Market, Co-marketing, Campaign management, EDM / CRM">
+  <input type="text" id="sk2" value="SEO / SEM, ASO, User acquisition, Retention strategy, Community building">
+  <input type="text" id="sk3" value="Public sector, Tourism boards, Telecom, Live events, Cross-functional">
+  <input type="text" id="sk4" value="Python, SQL, Data analysis">
+  <input type="text" id="sk5" value="Mandarin (Native), English (Fluent), Korean (Fluent), German (A1), Spanish (A1)">
+  <input type="text" id="sk6" value="BBA — Soochow University, Exchange — Cologne Intl Business School">
+</div>
 
+<!-- 拔除所有編輯面板後，唯一留下來的作品集主體渲染容器 -->
+<div id="preview-wrapper"></div>
+
+<script>
+// 完全保留你原本定義好的影像、專案、連結資料庫快取
+const SI = {};
+const PI = {};
+const LK = {};
+
+function v(id) { const el = document.getElementById(id); return el ? (el.value||'') : ''; }
+function rt(id) { const el = document.getElementById(id); return el ? el.innerHTML : ''; }
+function getMs(cid) { return Array.from(document.querySelectorAll('#'+cid+' input')).map(i=>i.value).filter(Boolean); }
+
+function pillsH(ms) {
+  return ms.map(m => { const p=m.split('|');
+    return `<span style="background:#f7f5f0;border:1px solid #e4e1d8;border-radius:4px;padding:3px 8px;font-size:11px;font-weight:500;white-space:nowrap"><em style="color:#2a6b4f;font-family:Georgia,serif">${p[0]}</em>${p[1]?' '+p[1]:''}</span>`;
+  }).join('');
+}
+function gridH(pid) {
+  const arr = PI[pid]||[]; if (!arr.length) return '';
+  const items = arr.map((src,i) =>
+    `<div onclick="openLb(${i},'${pid}')" style="cursor:zoom-in;overflow:hidden;border-radius:5px;aspect-ratio:1;background:#ddd"><img src="${src}" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform .2s" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='none'"></div>`
+  ).join('');
+  return `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(68px,1fr));gap:5px;margin-top:10px">${items}</div>`;
+}
+function linksH(pid) {
+  const arr = (LK[pid]||[]).filter(x=>x.url);
+  if (!arr.length) return '';
+  return `<div style="display:flex;flex-direction:column;gap:6px;margin-top:10px">${arr.map(m => {
+    const thumbPart = m.thumb
+      ? `<img src="${m.thumb}" alt="" style="width:60px;height:46px;object-fit:cover;border-radius:4px;flex-shrink:0">`
+      : `<div style="width:60px;height:46px;background:#e8f3ee;border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center"><i class="ti ti-link" aria-hidden="true" style="font-size:16px;color:#2a6b4f;"></i></div>`;
+    return `<a href="${m.url}" target="_blank" rel="noopener" style="display:flex;gap:10px;align-items:center;background:#fff;border:1px solid #e4e1d8;border-radius:7px;padding:8px 10px;text-decoration:none;transition:border-color .15s" onmouseover="this.style.borderColor='#2a6b4f'" onmouseout="this.style.borderColor='#e4e1d8'">
+      ${thumbPart}
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12px;font-weight:500;color:#141412;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">${m.title || m.url}</div>
+      </div>
+      <i class="ti ti-external-link" aria-hidden="true" style="font-size:13px;color:#9e9e96;flex-shrink:0"></i>
+    </a>`;
+  }).join('')}</div>`;
+}
+function skillT(raw) {
+  return raw.split(',').map(s=>s.trim()).filter(Boolean)
+    .map(s=>`<span style="font-size:12px;color:#5c5c56;background:#fff;border:1px solid #e4e1d8;border-radius:4px;padding:4px 9px;display:inline-block">${s}</span>`).join('');
+}
+function card(tag,title,descHtml,mid,pid) {
+  const ms = getMs(mid);
+  return `<div style="background:#fff;padding:1.1rem 1.2rem">
+<div style="display:inline-block;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#2a6b4f;background:#e8f3ee;padding:2px 7px;border-radius:3px;margin-bottom:.6rem;font-weight:500">${tag}</div>
+<div style="font-weight:500;font-size:13px;color:#141412;margin-bottom:.4rem;line-height:1.4">${title}</div>
+<div style="font-size:12px;color:#5c5c56;line-height:1.6;margin-bottom:.7rem">${descHtml}</div>
+${ms.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:.7rem">${pillsH(ms)}</div>`:''}
+${linksH(pid)}
+${gridH(pid)}
+</div>`;
+}
+function company(coId,prId,roleId,noteId,dot,logoKey,cards) {
+  const note = noteId ? `<div style="font-size:11px;color:#9e9e96;margin-bottom:1rem;padding-left:16px;font-style:italic">${v(noteId)}</div>` : '';
+  const logo = SI[logoKey] ? `<div style="margin-bottom:.8rem"><img src="${SI[logoKey]}" style="max-height:32px;max-width:120px;object-fit:contain"></div>` : '';
+  return `<div style="margin-bottom:44px">
+${logo}
+<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:.3rem;margin-bottom:.3rem">
+  <div style="display:flex;align-items:center;gap:9px"><div style="width:8px;height:8px;border-radius:50%;background:${dot};flex-shrink:0;margin-top:5px"></div><span style="font-family:Georgia,serif;font-size:18px;color:#141412">${v(coId)}</span></div>
+  <span style="font-size:11px;color:#9e9e96;padding-top:2px">${v(prId)} · Taipei, Taiwan</span>
+</div>
+<div style="font-size:12px;color:#5c5c56;margin-bottom:1rem;padding-left:16px">${v(roleId)}</div>
+${note}
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:#e4e1d8;border:1px solid #e4e1d8;border-radius:8px;overflow:hidden">${cards}</div>
+</div>`;
+}
+
+/* 核心不變：這就是你原本渲染完美排版的魔法函數 */
+function buildFinalDoc() {
+  const tp = v('h-title').split('|');
+  const th = tp.length>1 ? `${tp[0]}<br><em style="color:#2a6b4f">${tp[1]}</em>` : tp[0];
+  const av = SI['si-av'] ? `<img src="${SI['si-av']}" style="width:130px;height:162px;object-fit:cover;object-position:top center;border-radius:6px;flex-shrink:0">` : '';
+  const n = company('n-co','n-pr','n-role',null,'#2a6b4f','si-n', card(v('n1t'),v('n1ti'),rt('n1d'),'n1m','n1')+card(v('n2t'),v('n2ti'),rt('n2d'),'n2m','n2')+card(v('n3t'),v('n3ti'),rt('n3d'),'n3m','n3')+card(v('n4t'),v('n4ti'),rt('n4d'),'n4m','n4'));
+  const s = company('s-co','s-pr','s-role','s-note','#5a7fc4','si-s', card(v('s1t'),v('s1ti'),rt('s1d'),'s1m','s1')+card(v('s2t'),v('s2ti'),rt('s2d'),'s2m','s2')+card(v('s3t'),v('s3ti'),rt('s3d'),'s3m','s3'));
+  const o = company('o-co','o-pr','o-role',null,'#b04848','si-o', card(v('o1t'),v('o1ti'),rt('o1d'),'o1m','o1')+card(v('o2t'),v('o2ti'),rt('o2d'),'o2m','o2'));
+  const c = company('c-co','c-pr','c-role',null,'#a0a0a0','si-c', card(v('c1t'),v('c1ti'),rt('c1d'),'c1m','c1'));
+  const bioHtml = rt('h-bio');
+
+  return `
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
+body { font-family:'DM Sans',sans-serif; background:#f7f5f0; color:#141412; font-size:14px; line-height:1.7 }
+nav { background:rgba(247,245,240,.95); border-bottom:1px solid #e4e1d8; padding:0 5vw; display:flex; align-items:center; justify-content:space-between; height:50px; position:sticky; top:0; z-index:10 }
+.nn { font-family:Georgia,serif; font-size:15px; color:#141412; text-decoration:none }
+.nl { display:flex; gap:1.5rem; list-style:none }
+.nl a { font-size:12px; color:#5c5c56; text-decoration:none }
+.lb { display:none; position:fixed; inset:0; background:rgba(0,0,0,.9); z-index:999; align-items:center; justify-content:center; flex-direction:column; gap:14px }
+.lb.open { display:flex }
+.lb img { max-width:90vw; max-height:78vh; border-radius:6px; object-fit:contain }
+.lbc { position:absolute; top:14px; right:18px; color:#fff; font-size:30px; cursor:pointer; background:none; border:none; line-height:1 }
+.lbn { display:flex; gap:14px; align-items:center }
+.lbb { background:rgba(255,255,255,.15); border:none; color:#fff; font-size:22px; cursor:pointer; border-radius:50%; width:38px; height:38px; display:flex; align-items:center; justify-content:center }
+.lbb:hover { background:rgba(255,255,255,.28) }
+.lbct { font-size:12px; color:#999 }
+</style>
+<nav><a class="nn" href="#">${v('h-name')}</a><ul class="nl"><li><a href="#work">Experience</a></li><li><a href="#skills">Skills</a></li><li><a href="#contact">Contact</a></li></ul></nav>
+<div id="lb" class="lb" onclick="if(event.target===this)clb()">
+  <button class="lbc" onclick="clb()">×</button><img id="lbi" src="" alt="">
+  <div class="lbn"><button class="lbb" onclick="mlb(-1)">‹</button><span class="lbct" id="lbct"></span><button class="lbb" onclick="mlb(1)">›</button></div>
+</div>
+<div style="max-width:860px;margin:0 auto;padding:70px 5vw 52px">
+  <div style="display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:start;margin-bottom:48px">
+    <div>
+      <p style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#2a6b4f;font-weight:500;margin-bottom:.8rem">${v('h-eye')}</p>
+      <h1 style="font-family:Georgia,serif;font-size:clamp(28px,5vw,50px);font-weight:400;line-height:1.15;margin-bottom:.3rem">${th}</h1>
+      <p style="font-size:12px;color:#9e9e96;margin-bottom:1rem;letter-spacing:.04em">${v('h-sub')}</p>
+      <p style="font-size:13px;color:#5c5c56;max-width:460px;line-height:1.8;margin-bottom:1.5rem">${bioHtml}</p>
+      <div style="display:flex;gap:1.8rem;flex-wrap:wrap;padding-top:1.2rem;border-top:1px solid #e4e1d8">
+        ${[['s1n','s1l'],['s2n','s2l'],['s3n','s3l'],['s4n','s4l']].map(([n,l])=>`<div><span style="font-family:Georgia,serif;font-size:20px;font-style:italic;display:block">${v(n)}</span><span style="font-size:9px;color:#9e9e96;letter-spacing:.08em;text-transform:uppercase">${v(l)}</span></div>`).join('')}
+      </div>
+    </div>${av}
+  </div>
+  <div style="border-top:1px solid #e4e1d8;margin-bottom:40px"></div>
+  <p id="work" style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#2a6b4f;font-weight:500;margin-bottom:2rem;display:flex;align-items:center;gap:10px">Work experience<span style="flex:1;height:1px;background:#e4e1d8;display:inline-block"></span></p>
+  ${n}${s}${o}${c}
+  <div style="border-top:1px solid #e4e1d8;margin-bottom:40px"></div>
+  <p id="skills" style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#2a6b4f;font-weight:500;margin-bottom:1.5rem;display:flex;align-items:center;gap:10px">Skills & expertise<span style="flex:1;height:1px;background:#e4e1d8;display:inline-block"></span></p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1.4rem;margin-bottom:52px">
+    ${[['Marketing',v('sk1')],['Growth',v('sk2')],['Partnerships',v('sk3')],['Technical',v('sk4')],['Languages',v('sk5')],['Education',v('sk6')]].map(([h,r])=>`<div><div style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#9e9e96;margin-bottom:.5rem;font-weight:500">${h}</div><div style="display:flex;flex-wrap:wrap;gap:4px">${skillT(r)}</div></div>`).join('')}
+  </div>
+</div>
+<div id="contact" style="background:#141412;padding:44px 5vw">
+  <div style="max-width:860px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+    <div><h2 style="font-family:Georgia,serif;font-size:22px;font-weight:400;font-style:italic;color:#f0ede6;margin-bottom:.3rem">Let's build something together.</h2><p style="font-size:12px;color:#7a7a72">Open to marketing roles in gaming, tech, and consumer apps.</p></div>
+    <div style="display:flex;gap:.5rem"><a href="mailto:${v('h-email')}" style="background:#2a6b4f;color:#fff;padding:8px 16px;border-radius:5px;font-size:12px;text-decoration:none">Email me</a><a href="${v('h-linkedin')}" style="border:1px solid #333;color:#c0bdb4;padding:8px 16px;border-radius:5px;font-size:12px;text-decoration:none">LinkedIn →</a></div>
+  </div>
+</div>
+<div style="padding:1rem 5vw;text-align:center;font-size:11px;color:#9e9e96;border-top:1px solid #e4e1d8">© 2026 ${v('h-name')}</div>
+`;
+}
+
+// 直接把生成的乾淨內容注入到畫面最外層
+function render() {
+  document.getElementById('preview-wrapper').innerHTML = buildFinalDoc();
+}
+
+// 原封不動保留你的 Lightbox 影像輪播腳本
+var ld=JSON.stringify(PI),li=[],lx=0;
+function openLb(i,pid){li=ld[pid]||[];if(!li.length)return;lx=i;slb();}
+function slb(){document.getElementById('lbi').src=li[lx];document.getElementById('lbct').textContent=(lx+1)+' / '+li.length;document.getElementById('lb').classList.add('open');}
+function clb(){document.getElementById('lb').classList.remove('open');}
+function mlb(d){lx=(lx+d+li.length)%li.length;slb();}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')clb();if(e.key==='ArrowLeft')mlb(-1);if(e.key==='ArrowRight')mlb(1);});
+
+// 啟動渲染
+render();
+</script>
 </body>
 </html>
