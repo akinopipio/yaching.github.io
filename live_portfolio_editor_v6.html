@@ -1,0 +1,595 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.shell { font-family: var(--font-sans); }
+.topbar { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border: 0.5px solid var(--border); border-radius: 10px 10px 0 0; background: var(--surface-2); }
+.topbar-title { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+.btn-dl { background: #2a6b4f; color: #fff; border: none; border-radius: 6px; padding: 7px 16px; font-size: 12px; font-weight: 500; cursor: pointer; font-family: var(--font-sans); }
+.btn-dl:hover { background: #3d8f68; }
+.tabs { display: flex; border-left: 0.5px solid var(--border); border-right: 0.5px solid var(--border); border-bottom: 0.5px solid var(--border); background: var(--surface-1); overflow-x: auto; }
+.tab { padding: 8px 13px; font-size: 12px; cursor: pointer; border: none; background: none; color: var(--text-secondary); border-bottom: 2px solid transparent; margin-bottom: -1px; white-space: nowrap; font-family: var(--font-sans); }
+.tab.on { color: var(--text-primary); font-weight: 500; border-bottom-color: #2a6b4f; }
+.split { display: grid; grid-template-columns: 320px 1fr; border-left: 0.5px solid var(--border); border-right: 0.5px solid var(--border); border-bottom: 0.5px solid var(--border); border-radius: 0 0 10px 10px; overflow: hidden; }
+.fields { overflow-y: auto; overflow-x: hidden; max-height: 580px; padding: 12px 13px; border-right: 0.5px solid var(--border); background: var(--surface-1); }
+.pane { display: none; } .pane.on { display: block; }
+label { display: block; font-size: 10px; color: var(--text-secondary); margin: 10px 0 2px; letter-spacing: 0.05em; text-transform: uppercase; }
+label:first-child { margin-top: 0; }
+input[type=text] { width: 100%; padding: 6px 8px; font-size: 12px; border-radius: 5px; border: 0.5px solid var(--border); background: var(--surface-2); color: var(--text-primary); font-family: var(--font-sans); }
+input[type=text]:focus { outline: none; border-color: #2a6b4f; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.sec { font-size: 10px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin: 13px 0 6px; padding-top: 10px; border-top: 0.5px solid var(--border); }
+.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.stat-cell { background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 6px; padding: 7px 8px; }
+.stat-cell label { margin: 0 0 2px; font-size: 9px; }
+.uz { border: 1px dashed var(--border-strong); border-radius: 6px; padding: 8px 10px; text-align: center; cursor: pointer; position: relative; margin-bottom: 6px; }
+.uz:hover { background: var(--surface-2); }
+.uz input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+.uz-lbl { font-size: 11px; color: var(--text-muted); }
+.uz-lbl i { font-size: 16px; display: block; margin-bottom: 2px; }
+.uz-img { max-width: 100%; max-height: 48px; border-radius: 4px; display: none; margin: 4px auto 0; object-fit: contain; }
+.proj { background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 7px; padding: 9px 10px; margin-bottom: 7px; }
+.proj-lbl { font-size: 10px; font-weight: 500; color: var(--text-secondary); margin-bottom: 7px; text-transform: uppercase; letter-spacing: 0.06em; }
+.mrow { display: flex; gap: 4px; margin-bottom: 4px; align-items: center; }
+.mrow input { flex: 1; font-size: 11px; }
+.mrow button { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 14px; padding: 0 3px; line-height: 1; flex-shrink: 0; }
+.btn-add { font-size: 10px; color: #2a6b4f; background: none; border: 0.5px dashed #2a6b4f; border-radius: 4px; padding: 3px 9px; cursor: pointer; margin-top: 3px; font-family: var(--font-sans); }
+.btn-add:hover { background: #e8f3ee; }
+.imgs-zone { border: 1px dashed var(--border-strong); border-radius: 6px; padding: 7px 9px; margin-top: 6px; position: relative; }
+.imgs-zone > input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; z-index: 1; }
+.imgs-lbl { font-size: 10px; color: var(--text-muted); text-align: center; padding: 2px 0; pointer-events: none; }
+.thumbs { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; position: relative; z-index: 2; pointer-events: none; }
+.tw { position: relative; width: 40px; height: 40px; pointer-events: all; }
+.tw img { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; border: 0.5px solid var(--border); display: block; }
+.tw button { position: absolute; top: -4px; right: -4px; background: #e24b4a; color: #fff; border: none; border-radius: 50%; width: 13px; height: 13px; font-size: 9px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 3; }
+.link-editor { background: #fff; border: 0.5px solid var(--border); border-radius: 7px; padding: 8px; margin-bottom: 6px; }
+.link-editor-row { display: flex; gap: 6px; margin-bottom: 5px; }
+.link-thumb-zone { width: 56px; height: 44px; border: 1px dashed var(--border-strong); border-radius: 5px; position: relative; cursor: pointer; flex-shrink: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; background: var(--surface-2); }
+.link-thumb-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.link-thumb-zone img { width: 100%; height: 100%; object-fit: cover; display: none; }
+.link-thumb-zone i { font-size: 14px; color: var(--text-muted); }
+.link-fields { flex: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.link-fields input { font-size: 11px; padding: 5px 7px; }
+.link-del { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 14px; padding: 2px 4px; flex-shrink: 0; align-self: flex-start; }
+.btn-addlink { font-size: 10px; color: #2a6b4f; background: none; border: 0.5px dashed #2a6b4f; border-radius: 4px; padding: 4px 10px; cursor: pointer; margin-top: 2px; font-family: var(--font-sans); width: 100%; }
+.btn-addlink:hover { background: #e8f3ee; }
+
+/* RICH TEXT TOOLBAR + EDITABLE AREA */
+.rte-wrap { border: 0.5px solid var(--border); border-radius: 5px; overflow: hidden; background: var(--surface-2); }
+.rte-toolbar { display: flex; align-items: center; gap: 2px; padding: 4px; background: var(--surface-1); border-bottom: 0.5px solid var(--border); flex-wrap: wrap; }
+.rte-btn { background: none; border: none; cursor: pointer; padding: 3px 6px; border-radius: 4px; font-size: 11px; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; min-width: 22px; }
+.rte-btn:hover { background: var(--surface-2); }
+.rte-btn.bold-btn { font-weight: 700; }
+.rte-swatch { width: 16px; height: 16px; border-radius: 3px; cursor: pointer; border: 1px solid var(--border); flex-shrink: 0; }
+.rte-swatches { display: flex; gap: 3px; padding: 0 3px; align-items: center; }
+.rte-sep { width: 1px; height: 16px; background: var(--border); margin: 0 2px; }
+.rte-editable { min-height: 56px; padding: 7px 9px; font-size: 11px; line-height: 1.6; color: var(--text-primary); outline: none; }
+.rte-editable mark { background: none; padding: 0; }
+
+.preview-side { display: flex; flex-direction: column; background: #f0ece4; }
+.preview-bar { padding: 7px 12px; border-bottom: 0.5px solid #ddd; background: #e8e4dc; display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+.dot { width: 8px; height: 8px; border-radius: 50%; }
+.plbl { font-size: 10px; color: #999; margin-left: auto; letter-spacing: 0.05em; }
+#preview { width: 100%; border: none; min-height: 580px; background: #f7f5f0; display: block; }
+</style>
+
+<div class="shell">
+  <div class="topbar">
+    <span class="topbar-title"><i class="ti ti-pencil" aria-hidden="true" style="font-size:13px;vertical-align:-1px;margin-right:5px;"></i>Portfolio editor — Ya-Ching Choi</span>
+    <button class="btn-dl" onclick="dl()"><i class="ti ti-download" aria-hidden="true" style="margin-right:4px;"></i>Download</button>
+  </div>
+  <div class="tabs">
+    <button class="tab on" onclick="go('hero')">Hero</button>
+    <button class="tab" onclick="go('niantic')">Niantic</button>
+    <button class="tab" onclick="go('sparkful')">SPARKFUL</button>
+    <button class="tab" onclick="go('oppo')">OPPO</button>
+    <button class="tab" onclick="go('cheetah')">Cheetah</button>
+    <button class="tab" onclick="go('skills')">Skills</button>
+  </div>
+  <div class="split">
+    <div class="fields" id="fscroll">
+
+      <!-- HERO -->
+      <div class="pane on" id="pane-hero">
+        <div class="uz" id="uz-av"><input type="file" accept="image/*" onchange="singleImg(this,'si-av','uz-av')"><div class="uz-lbl"><i class="ti ti-user-circle" aria-hidden="true"></i>Profile photo</div><img id="si-av" class="uz-img"></div>
+        <label>Name</label><input type="text" id="h-name" value="Ya-Ching (Sunny) Choi" oninput="render()">
+        <label>Eyebrow</label><input type="text" id="h-eye" value="APAC Marketing · Brand Growth · Partnership" oninput="render()">
+        <label>Headline (| = line break)</label><input type="text" id="h-title" value="Building brands|that move people." oninput="render()">
+        <label>Sub-headline</label><input type="text" id="h-sub" value="Seattle, US · Open to opportunities" oninput="render()">
+        <label>Bio</label>
+        <div class="rte-wrap">
+          <div class="rte-toolbar">
+            <button class="rte-btn bold-btn" onmousedown="event.preventDefault()" onclick="fmt('bold')">B</button>
+            <div class="rte-sep"></div>
+            <div class="rte-swatches" id="sw-h-bio"></div>
+            <button class="rte-btn" onmousedown="event.preventDefault()" onclick="fmt('removeFormat')" title="Clear formatting"><i class="ti ti-eraser" aria-hidden="true"></i></button>
+          </div>
+          <div class="rte-editable" id="h-bio" contenteditable="true" oninput="render()">Marketing manager with 7+ years driving regional growth across mobile apps, consumer tech, and gaming. I build partnerships with governments and global brands, launch products into APAC markets — Japan, Korea, Australia, Singapore &amp; Taiwan — and create community programs that stick.</div>
+        </div>
+        <div class="sec">Stats</div>
+        <div class="stat-grid">
+          <div class="stat-cell"><label>Number</label><input type="text" id="s1n" value="7+" oninput="render()"><label>Label</label><input type="text" id="s1l" value="Years exp." oninput="render()"></div>
+          <div class="stat-cell"><label>Number</label><input type="text" id="s2n" value="33M+" oninput="render()"><label>Label</label><input type="text" id="s2l" value="Users reached" oninput="render()"></div>
+          <div class="stat-cell"><label>Number</label><input type="text" id="s3n" value="JP·KR·AU·SG·TW" oninput="render()"><label>Label</label><input type="text" id="s3l" value="APAC markets" oninput="render()"></div>
+          <div class="stat-cell"><label>Number</label><input type="text" id="s4n" value="4" oninput="render()"><label>Label</label><input type="text" id="s4l" value="Languages" oninput="render()"></div>
+        </div>
+        <div class="sec">Contact</div>
+        <label>Email</label><input type="text" id="h-email" value="yaching.choi@gmail.com" oninput="render()">
+        <label>LinkedIn URL</label><input type="text" id="h-linkedin" value="https://linkedin.com/in/ya-ching-choi" oninput="render()">
+      </div>
+
+      <!-- NIANTIC -->
+      <div class="pane" id="pane-niantic">
+        <div class="uz" id="uz-n"><input type="file" accept="image/*" onchange="singleImg(this,'si-n','uz-n')"><div class="uz-lbl"><i class="ti ti-building" aria-hidden="true"></i>Company logo</div><img id="si-n" class="uz-img"></div>
+        <div class="row2"><div><label>Company</label><input type="text" id="n-co" value="Niantic, Inc." oninput="render()"></div><div><label>Period</label><input type="text" id="n-pr" value="Jul 2024 – May 2026" oninput="render()"></div></div>
+        <label>Role</label><input type="text" id="n-role" value="APAC Marketing Manager — Pokémon GO" oninput="render()">
+        <div class="sec">Projects</div>
+
+        <div class="proj">
+          <div class="proj-lbl">Project 1</div>
+          <div class="row2"><div><label>Tag</label><input type="text" id="n1t" value="Public Sector" oninput="render()"></div><div><label>Title</label><input type="text" id="n1ti" value="Government & tourism partnerships" oninput="render()"></div></div>
+          <label>Description</label>
+          <div class="rte-wrap"><div class="rte-toolbar"><button class="rte-btn bold-btn" onmousedown="event.preventDefault()" onclick="fmt('bold')">B</button><div class="rte-sep"></div><div class="rte-swatches" id="sw-n1d"></div><button class="rte-btn" onmousedown="event.preventDefault()" onclick="fmt('removeFormat')"><i class="ti ti-eraser" aria-hidden="true"></i></button></div>
+          <div class="rte-editable" id="n1d" contenteditable="true" oninput="render()">Secured formal partnerships with The Pokémon Company Japan, HKTB, Singapore Tourism Board, Sydney Tourism Board, and Taipei &amp; Tainan City Governments to fund large-scale live events.</div></div>
+          <label>Metrics</label>
+          <div id="n1m"><div class="mrow"><input type="text" value="5 markets|Nationwide media"><button onclick="this.parentNode.remove();render()">×</button></div><div class="mrow"><input type="text" value="JP·KR·AU·SG·TW|Markets covered"><button onclick="this.parentNode.remove();render()">×</button></div></div>
+          <button class="btn-add" onclick="addM('n1m')">+ metric</button>
+          <label>Links</label>
+          <div id="links-n1"></div>
+          <button class="btn-addlink" onclick="addLinkCard('n1')">+ Add link</button>
+          <label>Project photos (4–10)</label>
+          <div class="imgs-zone" id="iz-n1"><input type="file" accept="image/*" multiple onchange="addImgs(this,'n1')" style="z-index:2"><div class="imgs-lbl"><i class="ti ti-photo" aria-hidden="true" style="font-size:13px;display:inline;margin-right:3px;"></i>Click to upload photos</div><div class="thumbs" id="th-n1"></div></div>
+        </div>
+
+        <div class="proj">
+          <div class="proj-lbl">Project 2</div>
+          <div class="row2"><div><label>Tag</label><input type="text" id="n2t" value="Co-Marketing" oninput="render()"></div><div><label>Title</label><input type="text" id="n2ti" value="APAC multi-channel campaigns" oninput="render()"></div></div>
+          <label>Description</label>
+          <div class="rte-wrap"><div class="rte-toolbar"><button class="rte-btn bold-btn" onmousedown="event.preventDefault()" onclick="fmt('bold')">B</button><div class="rte-sep"></div><div class="rte-swatches" id="sw-n2d"></div><button class="rte-btn" onmousedown="event.preventDefault()" onclick="fmt('removeFormat')"><i class="ti ti-eraser" aria-hidden="true"></i></button></div>
+          <div class="rte-editable" id="n2d" contenteditable="true" oninput="render()">Leveraged co-marketing frameworks with Google Play, Samsung Taiwan, AlipayHK, KKday, Chunghwa Telecom, and CSL HK — driving 17% MoM user growth across Taiwan and Hong Kong.</div></div>
+          <label>Metrics</label>
+          <div id="n2m"><div class="mrow"><input type="text" value="↑ 17% MoM|User growth"><button onclick="this.parentNode.remove();render()">×</button></div></div>
+          <button class="btn-add" onclick="addM('n2m')">+ metric</button>
+          <label>Links</label>
+          <div id="links-n2"></div>
+          <button class="btn-addlink" onclick="addLinkCard('n2')">+ Add link</button>
+          <label>Project photos (4–10)</label>
+          <div class="imgs-zone" id="iz-n2"><input type="file" accept="image/*" multiple onchange="addImgs(this,'n2')" style="z-index:2"><div class="imgs-lbl"><i class="ti ti-photo" aria-hidden="true" style="font-size:13px;display:inline;margin-right:3px;"></i>Click to upload photos</div><div class="thumbs" id="th-n2"></div></div>
+        </div>
+
+        <div class="proj">
+          <div class="proj-lbl">Project 3</div>
+          <div class="row2"><div><label>Tag</label><input type="text" id="n3t" value="Community" oninput="render()"></div><div><label>Title</label><input type="text" id="n3ti" value="Ambassador Program — Taiwan" oninput="render()"></div></div>
+          <label>Description</label>
+          <div class="rte-wrap"><div class="rte-toolbar"><button class="rte-btn bold-btn" onmousedown="event.preventDefault()" onclick="fmt('bold')">B</button><div class="rte-sep"></div><div class="rte-swatches" id="sw-n3d"></div><button class="rte-btn" onmousedown="event.preventDefault()" onclick="fmt('removeFormat')"><i class="ti ti-eraser" aria-hidden="true"></i></button></div>
+          <div class="rte-editable" id="n3d" contenteditable="true" oninput="render()">Built the Community Ambassador Program from 0 to 100 members in 1.5 years. Developed a campus recruitment playbook penetrating a brand-new demographic.</div></div>
+          <label>Metrics</label>
+          <div id="n3m"><div class="mrow"><input type="text" value="0 → 100|Members in 1.5 yrs"><button onclick="this.parentNode.remove();render()">×</button></div><div class="mrow"><input type="text" value="↑ 14%|New user acquisition"><button onclick="this.parentNode.remove();render()">×</button></div><div class="mrow"><input type="text" value="CMX Award Nominee|2025"><button onclick="this.parentNode.remove();render()">×</button></div></div>
+          <button class="btn-add" onclick="addM('n3m')">+ metric</button>
+          <label>Links</label>
+          <div id="links-n3"></div>
+          <button class="btn-addlink" onclick="addLinkCard('n3')">+ Add link</button>
+          <label>Project photos (4–10)</label>
+          <div class="imgs-zone" id="iz-n3"><input type="file" accept="image/*" multiple onchange="addImgs(this,'n3')" style="z-index:2"><div class="imgs-lbl"><i class="ti ti-photo" aria-hidden="true" style="font-size:13px;display:inline;margin-right:3px;"></i>Click to upload photos</div><div class="thumbs" id="th-n3"></div></div>
+        </div>
+
+        <div class="proj">
+          <div class="proj-lbl">Project 4</div>
+          <div class="row2"><div><label>Tag</label><input type="text" id="n4t" value="Live Events" oninput="render()"></div><div><label>Title</label><input type="text" id="n4ti" value="City Safari SG & GO Tour: New Taipei" oninput="render()"></div></div>
+          <label>Description</label>
+          <div class="rte-wrap"><div class="rte-toolbar"><button class="rte-btn bold-btn" onmousedown="event.preventDefault()" onclick="fmt('bold')">B</button><div class="rte-sep"></div><div class="rte-swatches" id="sw-n4d"></div><button class="rte-btn" onmousedown="event.preventDefault()" onclick="fmt('removeFormat')"><i class="ti ti-eraser" aria-hidden="true"></i></button></div>
+          <div class="rte-editable" id="n4d" contenteditable="true" oninput="render()">Led media &amp; partner amplification for HK's first IRL Pokémon GO event in 8 years and Singapore City Safari. Secured New Taipei Metro transit advertising system-wide for a full month.</div></div>
+          <label>Metrics</label>
+          <div id="n4m"><div class="mrow"><input type="text" value="Straits Times · CNA|Media coverage"><button onclick="this.parentNode.remove();render()">×</button></div><div class="mrow"><input type="text" value="10,000s|Attendees per event"><button onclick="this.parentNode.remove();render()">×</button></div></div>
+          <button class="btn-add" onclick="addM('n4m')">+ metric</button>
+          <label>Links</label>
+          <div id="links-n4"></div>
+          <button class="btn-addlink" onclick="addLinkCard('n4')">+ Add link</button>
+          <label>Project photos (4–10)</label>
+          <div class="imgs-zone" id="iz-n4"><input type="file" accept="image/*" multiple onchange="addImgs(this,'n4')" style="z-index:2"><div class="imgs-lbl"><i class="ti ti-photo" aria-hidden="true" style="font-size:13px;display:inline;margin-right:3px;"></i>Click to upload photos</div><div class="thumbs" id="th-n4"></div></div>
+        </div>
+      </div>
+
+      <!-- SPARKFUL -->
+      <div class="pane" id="pane-sparkful">
+        <div class="uz" id="uz-s"><input type="file" accept="image/*" onchange="singleImg(this,'si-s','uz-s')"><div class="uz-lbl"><i class="ti ti-building" aria-hidden="true"></i>Company logo</div><img id="si-s" class="uz-img"></div>
+        <div class="row2"><div><label>Company</label><input type="text" id="s-co" value="SPARKFUL" oninput="render()"></div><div><label>Period</label><input type="text" id="s-pr" value="Dec 2020 – Jul 2023" oninput="render()"></div></div>
+        <label>Role</label><input type="text" id="s-role" value="Global Marketing Manager (App)" oninput="render()">
+        <label>Company note</label><input type="text" id="s-note" value="20-person team · 33M+ global users in 5 years" oninput="render()">
+        <div class="sec">Projects</div>
+        <div class="proj">
+          <div class="proj-lbl">Project 1</div>
+          <div class="row2"><div><label>Tag</label><input type="text" id="s1t" value="Brand Campaign" oninput="render()"></div><div><label>Title</label><input type="text" id="s1ti" value="Global brand campaign during pandemic" oninput="render()"></div></div>
+          <label>Description</label>
+          <div class="rte-wrap"><div class="rte-toolbar"><button class="rte-btn bold-btn" onmousedown="event.preventDefault()" onclick="fmt('bold')">B</button><div class="rte-sep"></div><div class="rte-swatches" id="sw-s1d"></div><button class="rte-btn" onmousedown="event.preventDefault()" onclick="fmt('removeFormat')"><i class="ti ti-eraser" aria-hidden="true"></i></button></div>
+          <div class="rte-editable" id="s1d" contenteditable="true" oninput="render()">Led a global brand campaign during the pandemic, achieving 94% user satisfaction and a 14% annual increase in subscription sign-ups.</div></div>
+          <label>Metrics</label>
+          <div id="s1m"><div class="mrow"><input type="text" value="94%|User satisfaction"><button onclick="this.parentNode.remove();render()">×</button></div><div class="mrow"><input type="text" value="↑ 14% YoY|Subscription sign-ups"><button onclick="this.parentNode.remove();render()">×</button></div></div>
+          <button class="btn-add" onclick="addM('s1m')">+ metric</button>
+          <label>Links</label><div id="links-s1"></div><button class="btn-addlink" onclick="addLinkCard('s1')">+ Add link</button>
+          <label>Project photos</label>
+          <div class="imgs-zone" id="iz-s1"><input type="file" accept="image/*" multiple onchange="addImgs(this,'s1')" style="z-index:2"><div class="imgs-lbl"><i class="ti ti-photo" aria-hidden="true" style="font-size:13px;display:inline;margin-right:3px;"></i>Click to upload photos</div><div class="thumbs" id="th-s1"></div></div>
+        </div>
+        <div class="proj">
+          <div class="proj-lbl">Project 2</div>
+          <div class="row2"><div><label>Tag</label><input type="text" id="s2t" value="SEO / ASO" oninput="render()"></div><div><label>Title</label><input type="text" id="s2ti" value="Keyword strategy & ASO" oninput="render()"></div></div>
+          <label>Description</label>
+          <div class="rte-wrap"><div class="rte-toolbar"><button class="rte-btn bold-btn" onmousedown="event.preventDefault()" onclick="fmt('bold')">B</button><div class="rte-sep"></div><div class="rte-swatches" id="sw-s2d"></div><button class="rte-btn" onmousedown="event.preventDefault()" onclick="fmt('removeFormat')"><i class="ti ti-eraser" aria-hidden="true"></i></button></div>
+          <div class="rte-editable" id="s2d" contenteditable="true" oninput="render()">Advanced all products to page 1 within 6 months. Developed data-driven ASO for US, EU, and APAC — all apps entered top 10 rankings within one year, driving 24% YoY organic growth.</div></div>
+          <label>Metrics</label>
+          <div id="s2m"><div class="mrow"><input type="text" value="↑ 24% YoY|Organic acquisition"><button onclick="this.parentNode.remove();render()">×</button></div><div class="mrow"><input type="text" value="Top 10 in 1 yr|All apps ranked"><button onclick="this.parentNode.remove();render()">×</button></div></div>
+          <button class="btn-add" onclick="addM('s2m')">+ metric</button>
+          <label>Links</label><div id="links-s2"></div><button class="btn-addlink" onclick="addLinkCard('s2')">+ Add link</button>
+          <label>Project photos</label>
+          <div class="imgs-zone" id="iz-s2"><input type="file" accept="image/*" multiple onchange="addImgs(this,'s2')" style="z-index:2"><div class="imgs-lbl"><i class="ti ti-photo" aria-hidden="true" style="font-size:13px;display:inline;margin-right:3px;"></i>Click to upload photos</div><div class="thumbs" id="th-s2"></div></div>
+        </div>
+        <div class="proj">
+          <div class="proj-lbl">Project 3</div>
+          <div class="row2"><div><label>Tag</label><input type="text" id="s3t" value="EDM / CRM" oninput="render()"></div><div><label>Title</label><input type="text" id="s3ti" value="EDM funnel & retention strategy" oninput="render()"></div></div>
+          <label>Description</label>
+          <div class="rte-wrap"><div class="rte-toolbar"><button class="rte-btn bold-btn" onmousedown="event.preventDefault()" onclick="fmt('bold')">B</button><div class="rte-sep"></div><div class="rte-swatches" id="sw-s3d"></div><button class="rte-btn" onmousedown="event.preventDefault()" onclick="fmt('removeFormat')"><i class="ti ti-eraser" aria-hidden="true"></i></button></div>
+          <div class="rte-editable" id="s3d" contenteditable="true" oninput="render()">Achieved EDM funnel annual ROI in 7 months. Improved email open rates by 25% and boosted paid subscriptions by 8%.</div></div>
+          <label>Metrics</label>
+          <div id="s3m"><div class="mrow"><input type="text" value="↑ 25%|Email open rate"><button onclick="this.parentNode.remove();render()">×</button></div><div class="mrow"><input type="text" value="↑ 8%|Paid subscriptions"><button onclick="this.parentNode.remove();render()">×</button></div><div class="mrow"><input type="text" value="7 months|Annual ROI achieved in"><button onclick="this.parentNode.remove();render()">×</button></div></div>
+          <button class="btn-add" onclick="addM('s3m')">+ metric</button>
+          <label>Links</label><div id="links-s3"></div><button class="btn-addlink" onclick="addLinkCard('s3')">+ Add link</button>
+          <label>Project photos</label>
+          <div class="imgs-zone" id="iz-s3"><input type="file" accept="image/*" multiple onchange="addImgs(this,'s3')" style="z-index:2"><div class="imgs-lbl"><i class="ti ti-photo" aria-hidden="true" style="font-size:13px;display:inline;margin-right:3px;"></i>Click to upload photos</div><div class="thumbs" id="th-s3"></div></div>
+        </div>
+      </div>
+
+      <!-- OPPO -->
+      <div class="pane" id="pane-oppo">
+        <div class="uz" id="uz-o"><input type="file" accept="image/*" onchange="singleImg(this,'si-o','uz-o')"><div class="uz-lbl"><i class="ti ti-building" aria-hidden="true"></i>Company logo</div><img id="si-o" class="uz-img"></div>
+        <div class="row2"><div><label>Company</label><input type="text" id="o-co" value="OPPO" oninput="render()"></div><div><label>Period</label><input type="text" id="o-pr" value="Oct 2019 – Dec 2020" oninput="render()"></div></div>
+        <label>Role</label><input type="text" id="o-role" value="Senior Product Marketing Specialist — Smartphone" oninput="render()">
+        <div class="sec">Projects</div>
+        <div class="proj">
+          <div class="proj-lbl">Project 1</div>
+          <div class="row2"><div><label>Tag</label><input type="text" id="o1t" value="CRM" oninput="render()"></div><div><label>Title</label><input type="text" id="o1ti" value="CRM optimization & retention" oninput="render()"></div></div>
+          <label>Description</label>
+          <div class="rte-wrap"><div class="rte-toolbar"><button class="rte-btn bold-btn" onmousedown="event.preventDefault()" onclick="fmt('bold')">B</button><div class="rte-sep"></div><div class="rte-swatches" id="sw-o1d"></div><button class="rte-btn" onmousedown="event.preventDefault()" onclick="fmt('removeFormat')"><i class="ti ti-eraser" aria-hidden="true"></i></button></div>
+          <div class="rte-editable" id="o1d" contenteditable="true" oninput="render()">Re-engaged lapsed members by collaborating with the I/T team for CRM optimization, doubling retention rate from 6% to 13% in just 2 months.</div></div>
+          <label>Metrics</label>
+          <div id="o1m"><div class="mrow"><input type="text" value="6% → 13%|Retention in 2 months"><button onclick="this.parentNode.remove();render()">×</button></div></div>
+          <button class="btn-add" onclick="addM('o1m')">+ metric</button>
+          <label>Links</label><div id="links-o1"></div><button class="btn-addlink" onclick="addLinkCard('o1')">+ Add link</button>
+          <label>Project photos</label>
+          <div class="imgs-zone" id="iz-o1"><input type="file" accept="image/*" multiple onchange="addImgs(this,'o1')" style="z-index:2"><div class="imgs-lbl"><i class="ti ti-photo" aria-hidden="true" style="font-size:13px;display:inline;margin-right:3px;"></i>Click to upload photos</div><div class="thumbs" id="th-o1"></div></div>
+        </div>
+        <div class="proj">
+          <div class="proj-lbl">Project 2</div>
+          <div class="row2"><div><label>Tag</label><input type="text" id="o2t" value="Go-to-Market" oninput="render()"></div><div><label>Title</label><input type="text" id="o2ti" value="Flagship smartphone GTM strategy" oninput="render()"></div></div>
+          <label>Description</label>
+          <div class="rte-wrap"><div class="rte-toolbar"><button class="rte-btn bold-btn" onmousedown="event.preventDefault()" onclick="fmt('bold')">B</button><div class="rte-sep"></div><div class="rte-swatches" id="sw-o2d"></div><button class="rte-btn" onmousedown="event.preventDefault()" onclick="fmt('removeFormat')"><i class="ti ti-eraser" aria-hidden="true"></i></button></div>
+          <div class="rte-editable" id="o2d" contenteditable="true" oninput="render()">Drove the GTM strategy for OPPO's flagship mobile phone launch, delivering a 17% increase in product sales vs the previous season.</div></div>
+          <label>Metrics</label>
+          <div id="o2m"><div class="mrow"><input type="text" value="↑ 17%|Product sales vs prior season"><button onclick="this.parentNode.remove();render()">×</button></div></div>
+          <button class="btn-add" onclick="addM('o2m')">+ metric</button>
+          <label>Links</label><div id="links-o2"></div><button class="btn-addlink" onclick="addLinkCard('o2')">+ Add link</button>
+          <label>Project photos</label>
+          <div class="imgs-zone" id="iz-o2"><input type="file" accept="image/*" multiple onchange="addImgs(this,'o2')" style="z-index:2"><div class="imgs-lbl"><i class="ti ti-photo" aria-hidden="true" style="font-size:13px;display:inline;margin-right:3px;"></i>Click to upload photos</div><div class="thumbs" id="th-o2"></div></div>
+        </div>
+      </div>
+
+      <!-- CHEETAH -->
+      <div class="pane" id="pane-cheetah">
+        <div class="uz" id="uz-c"><input type="file" accept="image/*" onchange="singleImg(this,'si-c','uz-c')"><div class="uz-lbl"><i class="ti ti-building" aria-hidden="true"></i>Company logo</div><img id="si-c" class="uz-img"></div>
+        <div class="row2"><div><label>Company</label><input type="text" id="c-co" value="Cheetah Mobile" oninput="render()"></div><div><label>Period</label><input type="text" id="c-pr" value="Jun 2018 – Oct 2019" oninput="render()"></div></div>
+        <label>Role</label><input type="text" id="c-role" value="Product Marketing Specialist — AI and IoT" oninput="render()">
+        <div class="sec">Projects</div>
+        <div class="proj">
+          <div class="proj-lbl">Project 1</div>
+          <div class="row2"><div><label>Tag</label><input type="text" id="c1t" value="Product Launch" oninput="render()"></div><div><label>Title</label><input type="text" id="c1ti" value="IoT device launch campaigns" oninput="render()"></div></div>
+          <label>Description</label>
+          <div class="rte-wrap"><div class="rte-toolbar"><button class="rte-btn bold-btn" onmousedown="event.preventDefault()" onclick="fmt('bold')">B</button><div class="rte-sep"></div><div class="rte-swatches" id="sw-c1d"></div><button class="rte-btn" onmousedown="event.preventDefault()" onclick="fmt('removeFormat')"><i class="ti ti-eraser" aria-hidden="true"></i></button></div>
+          <div class="rte-editable" id="c1d" contenteditable="true" oninput="render()">Collaborated with cross-functional teams to develop and execute launch plans and creative content assets for IoT devices, resulting in a 10% increase in sales.</div></div>
+          <label>Metrics</label>
+          <div id="c1m"><div class="mrow"><input type="text" value="↑ 10%|Sales increase"><button onclick="this.parentNode.remove();render()">×</button></div></div>
+          <button class="btn-add" onclick="addM('c1m')">+ metric</button>
+          <label>Links</label><div id="links-c1"></div><button class="btn-addlink" onclick="addLinkCard('c1')">+ Add link</button>
+          <label>Project photos</label>
+          <div class="imgs-zone" id="iz-c1"><input type="file" accept="image/*" multiple onchange="addImgs(this,'c1')" style="z-index:2"><div class="imgs-lbl"><i class="ti ti-photo" aria-hidden="true" style="font-size:13px;display:inline;margin-right:3px;"></i>Click to upload photos</div><div class="thumbs" id="th-c1"></div></div>
+        </div>
+      </div>
+
+      <!-- SKILLS -->
+      <div class="pane" id="pane-skills">
+        <p style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">Separate with commas.</p>
+        <label>Marketing</label><input type="text" id="sk1" value="Brand strategy, Go-to-Market, Co-marketing, Campaign management, EDM / CRM" oninput="render()">
+        <label>Growth</label><input type="text" id="sk2" value="SEO / SEM, ASO, User acquisition, Retention strategy, Community building" oninput="render()">
+        <label>Partnerships</label><input type="text" id="sk3" value="Public sector, Tourism boards, Telecom, Live events, Cross-functional" oninput="render()">
+        <label>Technical</label><input type="text" id="sk4" value="Python, SQL, Data analysis" oninput="render()">
+        <label>Languages</label><input type="text" id="sk5" value="Mandarin (Native), English (Fluent), Korean (Fluent), German (A1), Spanish (A1)" oninput="render()">
+        <label>Education</label><input type="text" id="sk6" value="BBA — Soochow University, Exchange — Cologne Intl Business School" oninput="render()">
+      </div>
+
+    </div>
+
+    <div class="preview-side">
+      <div class="preview-bar">
+        <div class="dot" style="background:#ff5f57"></div>
+        <div class="dot" style="background:#febc2e"></div>
+        <div class="dot" style="background:#28c840"></div>
+        <span class="plbl">Live preview</span>
+      </div>
+      <iframe id="preview" title="Portfolio preview" sandbox="allow-same-origin allow-scripts"></iframe>
+    </div>
+  </div>
+</div>
+
+<script>
+const SI = {};
+const PI = {};
+const LK = {};
+let linkCounter = 0;
+let activeEditable = null;
+
+const PALETTE = ['#2a6b4f','#b04848','#5a7fc4','#c98a2e','#8a4fc9','#141412'];
+
+/* build color swatches for every rte toolbar */
+function buildSwatches() {
+  document.querySelectorAll('.rte-swatches').forEach(sw => {
+    sw.innerHTML = PALETTE.map(c => `<div class="rte-swatch" style="background:${c}" onmousedown="event.preventDefault()" onclick="applyColor('${c}')"></div>`).join('')
+      + `<div class="rte-swatch" style="background:#fff;display:flex;align-items:center;justify-content:center;font-size:9px;color:#999" onmousedown="event.preventDefault()" onclick="applyColor('inherit')" title="Reset color">A</div>`;
+  });
+}
+
+document.querySelectorAll('.rte-editable').forEach(el => {
+  el.addEventListener('focus', () => { activeEditable = el; });
+});
+
+function fmt(cmd) {
+  if (activeEditable) activeEditable.focus();
+  document.execCommand(cmd, false, null);
+  render();
+}
+
+function applyColor(color) {
+  if (activeEditable) activeEditable.focus();
+  if (color === 'inherit') {
+    document.execCommand('foreColor', false, '#141412');
+  } else {
+    document.execCommand('foreColor', false, color);
+  }
+  render();
+}
+
+function go(id) {
+  const order = ['hero','niantic','sparkful','oppo','cheetah','skills'];
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('on', order[i]===id));
+  document.querySelectorAll('.pane').forEach(p => p.classList.remove('on'));
+  document.getElementById('pane-'+id).classList.add('on');
+  document.getElementById('fscroll').scrollTop = 0;
+}
+
+function singleImg(inp, imgId, zoneId) {
+  const f = inp.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = e => {
+    SI[imgId] = e.target.result;
+    const el = document.getElementById(imgId);
+    el.src = e.target.result; el.style.display = 'block';
+    const lbl = document.querySelector('#'+zoneId+' .uz-lbl');
+    if (lbl) lbl.style.display = 'none';
+    render();
+  };
+  r.readAsDataURL(f);
+}
+
+function addImgs(inp, pid) {
+  if (!PI[pid]) PI[pid] = [];
+  const files = Array.from(inp.files); let done = 0;
+  files.forEach(f => {
+    const r = new FileReader();
+    r.onload = e => { PI[pid].push(e.target.result); done++; if (done===files.length){rebuildThumbs(pid);render();} };
+    r.readAsDataURL(f);
+  });
+  inp.value = '';
+}
+function rebuildThumbs(pid) {
+  const w = document.getElementById('th-'+pid); if (!w) return;
+  w.innerHTML = (PI[pid]||[]).map((src,i) => `<div class="tw"><img src="${src}" alt=""><button onclick="delImg('${pid}',${i})">×</button></div>`).join('');
+}
+function delImg(pid, i) { PI[pid].splice(i,1); rebuildThumbs(pid); render(); }
+
+function addM(cid) {
+  const d = document.createElement('div'); d.className = 'mrow';
+  d.innerHTML = '<input type="text" placeholder="value|label" oninput="render()"><button onclick="this.parentNode.remove();render()">×</button>';
+  document.getElementById(cid).appendChild(d);
+}
+
+function addLinkCard(pid) {
+  if (!LK[pid]) LK[pid] = [];
+  const id = 'lk' + (linkCounter++);
+  LK[pid].push({ id, url: '', title: '', thumb: '' });
+  rebuildLinkEditors(pid);
+}
+function rebuildLinkEditors(pid) {
+  const container = document.getElementById('links-'+pid);
+  container.innerHTML = (LK[pid]||[]).map(item => `
+    <div class="link-editor" id="le-${item.id}">
+      <div class="link-editor-row">
+        <div class="link-thumb-zone" id="ltz-${item.id}">
+          <input type="file" accept="image/*" onchange="setLinkThumb(this,'${pid}','${item.id}')">
+          <img id="lti-${item.id}" src="${item.thumb||''}" style="${item.thumb?'display:block':'display:none'}">
+          <i class="ti ti-photo" id="lic-${item.id}" aria-hidden="true" style="${item.thumb?'display:none':'display:block'}"></i>
+        </div>
+        <div class="link-fields">
+          <input type="text" placeholder="https://..." value="${item.url}" oninput="updateLink('${pid}','${item.id}','url',this.value)">
+          <input type="text" placeholder="Display name" value="${item.title}" oninput="updateLink('${pid}','${item.id}','title',this.value)">
+        </div>
+        <button class="link-del" onclick="delLinkCard('${pid}','${item.id}')">×</button>
+      </div>
+    </div>`).join('');
+}
+function setLinkThumb(inp, pid, id) {
+  const f = inp.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = e => {
+    const item = LK[pid].find(x=>x.id===id);
+    if (item) item.thumb = e.target.result;
+    document.getElementById('lti-'+id).src = e.target.result;
+    document.getElementById('lti-'+id).style.display = 'block';
+    document.getElementById('lic-'+id).style.display = 'none';
+    render();
+  };
+  r.readAsDataURL(f);
+}
+function updateLink(pid, id, field, val) {
+  const item = LK[pid].find(x=>x.id===id);
+  if (item) item[field] = val;
+  render();
+}
+function delLinkCard(pid, id) {
+  LK[pid] = LK[pid].filter(x=>x.id!==id);
+  rebuildLinkEditors(pid);
+  render();
+}
+
+function v(id) { const el = document.getElementById(id); return el ? (el.value||'') : ''; }
+function rt(id) { const el = document.getElementById(id); return el ? el.innerHTML : ''; }
+function getMs(cid) { return Array.from(document.querySelectorAll('#'+cid+' input')).map(i=>i.value).filter(Boolean); }
+
+function pillsH(ms) {
+  return ms.map(m => { const p=m.split('|');
+    return `<span style="background:#f7f5f0;border:1px solid #e4e1d8;border-radius:4px;padding:3px 8px;font-size:11px;font-weight:500;white-space:nowrap"><em style="color:#2a6b4f;font-family:Georgia,serif">${p[0]}</em>${p[1]?' '+p[1]:''}</span>`;
+  }).join('');
+}
+
+function gridH(pid) {
+  const arr = PI[pid]||[]; if (!arr.length) return '';
+  const items = arr.map((src,i) =>
+    `<div onclick="openLb(${i},'${pid}')" style="cursor:zoom-in;overflow:hidden;border-radius:5px;aspect-ratio:1;background:#ddd"><img src="${src}" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform .2s" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='none'"></div>`
+  ).join('');
+  return `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(68px,1fr));gap:5px;margin-top:10px">${items}</div>`;
+}
+
+function linksH(pid) {
+  const arr = (LK[pid]||[]).filter(x=>x.url);
+  if (!arr.length) return '';
+  return `<div style="display:flex;flex-direction:column;gap:6px;margin-top:10px">${arr.map(m => {
+    const thumbPart = m.thumb
+      ? `<img src="${m.thumb}" alt="" style="width:60px;height:46px;object-fit:cover;border-radius:4px;flex-shrink:0">`
+      : `<div style="width:60px;height:46px;background:#e8f3ee;border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center"><i class="ti ti-link" aria-hidden="true" style="font-size:16px;color:#2a6b4f;"></i></div>`;
+    return `<a href="${m.url}" target="_blank" rel="noopener" style="display:flex;gap:10px;align-items:center;background:#fff;border:1px solid #e4e1d8;border-radius:7px;padding:8px 10px;text-decoration:none;transition:border-color .15s" onmouseover="this.style.borderColor='#2a6b4f'" onmouseout="this.style.borderColor='#e4e1d8'">
+      ${thumbPart}
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12px;font-weight:500;color:#141412;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">${m.title || m.url}</div>
+      </div>
+      <i class="ti ti-external-link" aria-hidden="true" style="font-size:13px;color:#9e9e96;flex-shrink:0"></i>
+    </a>`;
+  }).join('')}</div>`;
+}
+
+function skillT(raw) {
+  return raw.split(',').map(s=>s.trim()).filter(Boolean)
+    .map(s=>`<span style="font-size:12px;color:#5c5c56;background:#fff;border:1px solid #e4e1d8;border-radius:4px;padding:4px 9px;display:inline-block">${s}</span>`).join('');
+}
+
+function card(tag,title,descHtml,mid,pid) {
+  const ms = getMs(mid);
+  return `<div style="background:#fff;padding:1.1rem 1.2rem">
+<div style="display:inline-block;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#2a6b4f;background:#e8f3ee;padding:2px 7px;border-radius:3px;margin-bottom:.6rem;font-weight:500">${tag}</div>
+<div style="font-weight:500;font-size:13px;color:#141412;margin-bottom:.4rem;line-height:1.4">${title}</div>
+<div style="font-size:12px;color:#5c5c56;line-height:1.6;margin-bottom:.7rem">${descHtml}</div>
+${ms.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:.7rem">${pillsH(ms)}</div>`:''}
+${linksH(pid)}
+${gridH(pid)}
+</div>`;
+}
+
+function company(coId,prId,roleId,noteId,dot,logoKey,cards) {
+  const note = noteId ? `<div style="font-size:11px;color:#9e9e96;margin-bottom:1rem;padding-left:16px;font-style:italic">${v(noteId)}</div>` : '';
+  const logo = SI[logoKey] ? `<div style="margin-bottom:.8rem"><img src="${SI[logoKey]}" style="max-height:32px;max-width:120px;object-fit:contain"></div>` : '';
+  return `<div style="margin-bottom:44px">
+${logo}
+<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:.3rem;margin-bottom:.3rem">
+  <div style="display:flex;align-items:center;gap:9px"><div style="width:8px;height:8px;border-radius:50%;background:${dot};flex-shrink:0;margin-top:5px"></div><span style="font-family:Georgia,serif;font-size:18px;color:#141412">${v(coId)}</span></div>
+  <span style="font-size:11px;color:#9e9e96;padding-top:2px">${v(prId)} · Taipei, Taiwan</span>
+</div>
+<div style="font-size:12px;color:#5c5c56;margin-bottom:1rem;padding-left:16px">${v(roleId)}</div>
+${note}
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:#e4e1d8;border:1px solid #e4e1d8;border-radius:8px;overflow:hidden">${cards}</div>
+</div>`;
+}
+
+function render() {
+  const tp = v('h-title').split('|');
+  const th = tp.length>1 ? `${tp[0]}<br><em style="color:#2a6b4f">${tp[1]}</em>` : tp[0];
+  const av = SI['si-av'] ? `<img src="${SI['si-av']}" style="width:130px;height:162px;object-fit:cover;object-position:top center;border-radius:6px;flex-shrink:0">` : '';
+  const n = company('n-co','n-pr','n-role',null,'#2a6b4f','si-n', card(v('n1t'),v('n1ti'),rt('n1d'),'n1m','n1')+card(v('n2t'),v('n2ti'),rt('n2d'),'n2m','n2')+card(v('n3t'),v('n3ti'),rt('n3d'),'n3m','n3')+card(v('n4t'),v('n4ti'),rt('n4d'),'n4m','n4'));
+  const s = company('s-co','s-pr','s-role','s-note','#5a7fc4','si-s', card(v('s1t'),v('s1ti'),rt('s1d'),'s1m','s1')+card(v('s2t'),v('s2ti'),rt('s2d'),'s2m','s2')+card(v('s3t'),v('s3ti'),rt('s3d'),'s3m','s3'));
+  const o = company('o-co','o-pr','o-role',null,'#b04848','si-o', card(v('o1t'),v('o1ti'),rt('o1d'),'o1m','o1')+card(v('o2t'),v('o2ti'),rt('o2d'),'o2m','o2'));
+  const c = company('c-co','c-pr','c-role',null,'#a0a0a0','si-c', card(v('c1t'),v('c1ti'),rt('c1d'),'c1m','c1'));
+  const bioHtml = rt('h-bio');
+
+  const doc = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'DM Sans',sans-serif;background:#f7f5f0;color:#141412;font-size:14px;line-height:1.7}
+nav{background:rgba(247,245,240,.95);border-bottom:1px solid #e4e1d8;padding:0 5vw;display:flex;align-items:center;justify-content:space-between;height:50px;position:sticky;top:0;z-index:10}
+.nn{font-family:Georgia,serif;font-size:15px;color:#141412;text-decoration:none}.nl{display:flex;gap:1.5rem;list-style:none}.nl a{font-size:12px;color:#5c5c56;text-decoration:none}
+.lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:999;align-items:center;justify-content:center;flex-direction:column;gap:14px}
+.lb.open{display:flex}.lb img{max-width:90vw;max-height:78vh;border-radius:6px;object-fit:contain}
+.lbc{position:absolute;top:14px;right:18px;color:#fff;font-size:30px;cursor:pointer;background:none;border:none;line-height:1}
+.lbn{display:flex;gap:14px;align-items:center}
+.lbb{background:rgba(255,255,255,.15);border:none;color:#fff;font-size:22px;cursor:pointer;border-radius:50%;width:38px;height:38px;display:flex;align-items:center;justify-content:center}
+.lbb:hover{background:rgba(255,255,255,.28)}.lbct{font-size:12px;color:#999}
+</style></head><body>
+<nav><a class="nn" href="#">${v('h-name')}</a><ul class="nl"><li><a href="#work">Experience</a></li><li><a href="#skills">Skills</a></li><li><a href="#contact">Contact</a></li></ul></nav>
+<div id="lb" class="lb" onclick="if(event.target===this)clb()">
+  <button class="lbc" onclick="clb()">×</button><img id="lbi" src="" alt="">
+  <div class="lbn"><button class="lbb" onclick="mlb(-1)">‹</button><span class="lbct" id="lbct"></span><button class="lbb" onclick="mlb(1)">›</button></div>
+</div>
+<div style="max-width:860px;margin:0 auto;padding:70px 5vw 52px">
+  <div style="display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:start;margin-bottom:48px">
+    <div>
+      <p style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#2a6b4f;font-weight:500;margin-bottom:.8rem">${v('h-eye')}</p>
+      <h1 style="font-family:Georgia,serif;font-size:clamp(28px,5vw,50px);font-weight:400;line-height:1.15;margin-bottom:.3rem">${th}</h1>
+      <p style="font-size:12px;color:#9e9e96;margin-bottom:1rem;letter-spacing:.04em">${v('h-sub')}</p>
+      <p style="font-size:13px;color:#5c5c56;max-width:460px;line-height:1.8;margin-bottom:1.5rem">${bioHtml}</p>
+      <div style="display:flex;gap:1.8rem;flex-wrap:wrap;padding-top:1.2rem;border-top:1px solid #e4e1d8">
+        ${[['s1n','s1l'],['s2n','s2l'],['s3n','s3l'],['s4n','s4l']].map(([n,l])=>`<div><span style="font-family:Georgia,serif;font-size:20px;font-style:italic;display:block">${v(n)}</span><span style="font-size:9px;color:#9e9e96;letter-spacing:.08em;text-transform:uppercase">${v(l)}</span></div>`).join('')}
+      </div>
+    </div>${av}
+  </div>
+  <div style="border-top:1px solid #e4e1d8;margin-bottom:40px"></div>
+  <p id="work" style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#2a6b4f;font-weight:500;margin-bottom:2rem;display:flex;align-items:center;gap:10px">Work experience<span style="flex:1;height:1px;background:#e4e1d8;display:inline-block"></span></p>
+  ${n}${s}${o}${c}
+  <div style="border-top:1px solid #e4e1d8;margin-bottom:40px"></div>
+  <p id="skills" style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#2a6b4f;font-weight:500;margin-bottom:1.5rem;display:flex;align-items:center;gap:10px">Skills & expertise<span style="flex:1;height:1px;background:#e4e1d8;display:inline-block"></span></p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1.4rem;margin-bottom:52px">
+    ${[['Marketing',v('sk1')],['Growth',v('sk2')],['Partnerships',v('sk3')],['Technical',v('sk4')],['Languages',v('sk5')],['Education',v('sk6')]].map(([h,r])=>`<div><div style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#9e9e96;margin-bottom:.5rem;font-weight:500">${h}</div><div style="display:flex;flex-wrap:wrap;gap:4px">${skillT(r)}</div></div>`).join('')}
+  </div>
+</div>
+<div id="contact" style="background:#141412;padding:44px 5vw">
+  <div style="max-width:860px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+    <div><h2 style="font-family:Georgia,serif;font-size:22px;font-weight:400;font-style:italic;color:#f0ede6;margin-bottom:.3rem">Let's build something together.</h2><p style="font-size:12px;color:#7a7a72">Open to marketing roles in gaming, tech, and consumer apps.</p></div>
+    <div style="display:flex;gap:.5rem"><a href="mailto:${v('h-email')}" style="background:#2a6b4f;color:#fff;padding:8px 16px;border-radius:5px;font-size:12px;text-decoration:none">Email me</a><a href="${v('h-linkedin')}" style="border:1px solid #333;color:#c0bdb4;padding:8px 16px;border-radius:5px;font-size:12px;text-decoration:none">LinkedIn →</a></div>
+  </div>
+</div>
+<div style="padding:1rem 5vw;text-align:center;font-size:11px;color:#9e9e96;border-top:1px solid #e4e1d8">© 2026 ${v('h-name')}</div>
+<script>
+var ld=${JSON.stringify(PI)},li=[],lx=0;
+function openLb(i,pid){li=ld[pid]||[];if(!li.length)return;lx=i;slb();}
+function slb(){document.getElementById('lbi').src=li[lx];document.getElementById('lbct').textContent=(lx+1)+' / '+li.length;document.getElementById('lb').classList.add('open');}
+function clb(){document.getElementById('lb').classList.remove('open');}
+function mlb(d){lx=(lx+d+li.length)%li.length;slb();}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')clb();if(e.key==='ArrowLeft')mlb(-1);if(e.key==='ArrowRight')mlb(1);});
+<\/script></body></html>`;
+
+  const fr = document.getElementById('preview');
+  const blob = new Blob([doc],{type:'text/html'});
+  if(window._pu) URL.revokeObjectURL(window._pu);
+  window._pu = URL.createObjectURL(blob);
+  fr.src = window._pu;
+}
+
+function dl() {
+  if(!window._pu) render();
+  setTimeout(()=>{ const a=document.createElement('a'); a.href=window._pu; a.download='index.html'; a.click(); },200);
+}
+
+buildSwatches();
+render();
+</script>
